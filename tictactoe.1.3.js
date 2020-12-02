@@ -17,7 +17,11 @@ for (r = 0; r < boardSize; r++){
 	board[r] = [];
 	
 	for (c = 0; c < boardSize; c++){
-		board[r][c] = emptyCell;
+		//board[r][c] = emptyCell;
+		board[r][c] = Object.assign({
+			x:c, y:r
+		}, emptyCell);
+		
 	}
 }
 

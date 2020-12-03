@@ -4,6 +4,9 @@ const canvasTop = canvas.offsetTop + canvas.clientTop;
 const ctx = canvas.getContext("2d");
 var boardSize = 3;
 
+const playerColour = "Red";
+const aiColour = "Blue";
+
 const cellSize = (document.getElementById("gamecanvas").width)/boardSize;
 const emptyCell = {colour: "White", top:cellSize, left:cellSize, full: false};
 const playerCell = {colour: "Red", top:cellSize, left:cellSize, full: true};
@@ -68,6 +71,9 @@ function drawBoard(){
 
 drawBoard();
 var turnState = true;
+	
+
+
 
 
 

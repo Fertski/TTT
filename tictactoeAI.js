@@ -1,11 +1,5 @@
-const playerColour = "Red";
-const aiColour = "Blue";
 
 function aiTurn(){
-	
-	if (turnState == true){
-		return;
-	}
 	
 	var s1 = board[0][0];
 	var s2 = board[0][1];
@@ -44,7 +38,7 @@ function aiTurn(){
 		[s3, s7],
 		[s9, s1],
 		[s7, s3]
-	]
+	];
 	
 	var corners = [s1, s3, s7, s9];
 	var edges = [s2, s4, s6, s8];
@@ -63,7 +57,6 @@ function aiTurn(){
 				if (winStates[x][y].colour == emptyCell.colour){
 					emptyCount++;
 					emptyLocation = winStates[x][y];
-					//console.log(emptyLocation);
 					if (emptyCount > 1){
 						break;
 					}
@@ -77,24 +70,33 @@ function aiTurn(){
 		}
 	}
 	
-	function checkFork(col){
+	function checkFork(col, otherCol){
 		
 		for (x = 0; x < forkStates.length; x++){
 			
 			var colourCount = 0;
 			var emptyCount = 0;
+			var innerColourCount = 0;
+			
 			
 			for (y = 0; y < forkStates[x].length; y++){
-				if (forkStates[x][y].colour == col && (y == 1 || y == 5)){
+				if (forkStates[x][y].colour == col && (y == 0 || y == 4)){
 					colourCount++;
 				}
-				if (forkStates[x][y].colour == emptyCell.colour && (y != 1 || y != 5)){
+				if (forkStates[x][y].colour == col && (y == 1 || y == 3)){
+					innerColourCount++;
+				}
+				if (forkStates[x][y].colour == emptyCell.colour){
 					emptyCount++;
 					if (emptyCount > 3){
 						break;
 					}
 				}
-				if (colourCount == 2 && emptyCount == 3){
+				if (colourCount == 2 && emptyCount == 3 && s5.colour == otherCol){
+					makeMove(forkStates[x][1].x, forkStates[x][1].y);
+					return;
+				}
+				if ((colourCount == 2 || innerColourCount == 2) && emptyCount == 3){
 					makeMove(forkStates[x][2].x, forkStates[x][2].y);
 					return;
 				}
@@ -136,8 +138,6 @@ function aiTurn(){
 			}
 		}
 	}
-		
-		
 
 	checkWin(aiColour);
 		if (turnState == true){
@@ -147,11 +147,11 @@ function aiTurn(){
 		if (turnState == true){
 			return;
 		}
-	checkFork(aiColour);
+	checkFork(aiColour, playerColour);
 		if (turnState == true){
 			return;
 		}
-	checkFork(playerColour);
+	checkFork(playerColour, aiColour);
 		if (turnState == true){
 			return;
 		}
@@ -168,14 +168,13 @@ function aiTurn(){
 			return;
 		}
 	takeEmptySide();
-	turnState = true;
 
 	function makeMove(x,y){
 		
 		drawCell(x*cellSize, y*cellSize, aiColour);
 		board[y][x] = aiCell;
 
-		turnState = true;
+		turnState = !turnState;
 		drawBoard();
 	}
 
